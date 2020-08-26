@@ -2,9 +2,11 @@
 
 namespace App;
 
+use App\Profile;
+use Illuminate\Support\Facades\App;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -36,4 +38,44 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function profile() 
+    {
+        return $this->hasOne(Profile::class);
+    }
+
+    public function level() 
+    {
+        return $this->belongsTo(Level::class);
+    }
+
+    public function groups() 
+    {
+        return $this->belongsToMany(Group::class);
+    }
+
+    public function location() 
+    {
+        return $this->hasOneThrough(Location::class, Profile::class);
+    }
+
+    public function posts() 
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function videos() 
+    {
+        return $this->hasMany(Video::class);
+    }
+
+    public function comments() 
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function image() 
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
 }
